@@ -1,5 +1,5 @@
 import { useState } from "react";
-export default function Player({ symbol, isActive }) {
+export default function Player({ symbol, isActive, onSave }) {
   let [editMode, setEditMode] = useState(true);
   let [name, setName] = useState("player name");
   const ask = (
@@ -13,6 +13,7 @@ export default function Player({ symbol, isActive }) {
   );
   const handleEdit = () => {
     setEditMode((editing) => !editing); // vip line its the best pracitcec and recomenation of react team
+    if (editMode) onSave(symbol, name);
   };
 
   return (

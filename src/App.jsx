@@ -63,6 +63,10 @@ function App() {
   // who should update active player ?? --> GameBoard
   // who should know the gameBoard ?? App & GameBoard as app needs to know the winner or the draw to display game over comp
   //and GameBoard as it needs to render and update board
+  const [players, setPlayers] = useState({
+    X: "player 1",
+    O: "player 2",
+  });
   const [gameBoard, setGameBoard] = useState(intialBoard);
   let [activePlayer, setActivePlayer] = useState("X");
   const changeActivePlayer = () => {
@@ -75,12 +79,28 @@ function App() {
   };
   let winner = checkWinner(gameBoard);
 
+  function handlePlayerNameChange(symbol, newName) {
+    setPlayers((prevPlayers) => {
+      return {
+        ...prevPlayers,
+        [symbol]: newName,
+      };
+    });
+  }
   return (
     <main>
       <div id="game-container">
         <ol id="players" className="highlight-player">
-          <Player symbol="x" isActive={activePlayer === "X" ? true : false} />
-          <Player symbol="O" isActive={activePlayer === "O" ? true : false} />
+          <Player
+            symbol="X"
+            isActive={activePlayer === "X" ? true : false}
+            onSave={handlePlayerNameChange}
+          />
+          <Player
+            symbol="O"
+            isActive={activePlayer === "O" ? true : false}
+            onSave={handlePlayerNameChange}
+          />
         </ol>
         <GameBoard
           changeActivePlayer={changeActivePlayer}
@@ -88,7 +108,9 @@ function App() {
           setGameBoard={setGameBoard}
           gameBoard={gameBoard}
         />
-        {winner && <GameOver winner={winner} restart={restart} />}
+        {winner && (
+          <GameOver winner={winner} restart={restart} info={players} />
+        )}
       </div>
     </main>
   );
